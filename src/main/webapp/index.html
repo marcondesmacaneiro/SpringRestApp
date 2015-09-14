@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>REST App Server + jQuery Client Example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="jquery-1.11.3.js"></script>
+    </head>
+    <body>
+        <div>Exemplo de Cadastro com jQuery + REST</div>
+
+        <button id="buscar">Buscar Registros</button>
+        <button id="cadastrar">Cadastrar Novo</button>
+
+        <div id="resultado">Resultado</div>
+        <script type="text/javascript">
+            function frmAlterar(uf) {
+                $.get("frmAlterar.html", function (data, status) {
+                    $("div#resultado").html(data);
+                });
+
+                $.getJSON("estado/search/findByUf?uf=" + uf, function (result) {
+                    $("#uf").val(result._embedded.estado[0].uf);
+                    $("#nome").val(result._embedded.estado[0].nome);
+                    $("#salvarAlteracao").click(function () {
+                        $.ajax({
+                            url: 'estadoteste/' + result._embedded.estado[0].uf,
+                            type: 'PUT',
+                            contentType: "application/json",
+                            data: "{\"uf\":\"" + $("#uf").val() + "\", \"nome\":\"" + $("#nome").val() + "\"}",
+                            success: function (data) {
+                                console.log("Sucesso! Registro de estado alterado.");
+                            }
+                        });
+                    });
+                });
+            }
+
+            function frmExcluir(uf) {
+                $.getJSON("estado/search/findByUf?uf=" + uf, function (result) {
+                    $.ajax({
+                        url: 'estadoteste/' + uf,
+                        type: 'DELETE',
+                        contentType: "application/json",
+                        data: "{\"uf\":\"" + result._embedded.estado[0].uf + "\", \"nome\":\"" + result._embedded.estado[0].nome + "\"}",
+                        success: function (data) {
+                            console.log("Sucesso! Registro de estado eliminado.");
+                        }
+                    });
+                });
+            }
+            $(document).ready(function () {
+                $("#buscar").click(function () {
+                    $.getJSON("estado", function (result) {
+                        $("div#resultado").html("");
+                        var tabela = "<table border=\"1\"><tr><td>UF</td><td>Nome</td><td>Ação</td></tr>";
+                        $.each(result._embedded.estado, function (i, field) {
+                            tabela += "<tr><td>" + field.uf + "</td><td>" + field.nome +
+                                    "</td><td><a href=\"#\" onclick=\"frmAlterar('" + field.uf +
+                                    "'); return false;\">Alterar</a>";
+
+                            tabela += "<a href=\"#\" onclick=\"frmExcluir('" + field.uf +
+                                    "'); return false;\">Excluír</a>";
+
+                            tabela += "</td></tr>";
+                        });
+                        tabela += "</table>";
+                        $("div#resultado").append(tabela);
+                    });
+
+                });
+
+                $("#cadastrar").click(function () {
+                    $.get("frmAlterar.html", function (data, status) {
+                        $("div#resultado").html(data);
+
+                        $("#salvarAlteracao").click(function () {
+                            $.ajax({
+                                url: 'estadoteste/',
+                                type: 'POST',
+                                contentType: "application/json",
+                                data: "{\"uf\":\"" + $("#uf").val() + "\", \"nome\":\"" + $("#nome").val() + "\"}",
+                                success: function (data) {
+                                    console.log("Sucesso! Registro de estado cadastrado.");
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,171 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 07/10/2015, 20:45:39
+    Author     : Cleber
+*/
+
+body{
+    background: #d7ccc8;
+}
+
+.row{
+    
+    margin-top: 25px;
+}
+
+#linha01, #linha01 p{
+    background: #616161;
+    color: white;
+   
+}
+
+#linha01,#linha02{
+    margin-top: 1px;
+
+}
+
+#linha01{
+    margin-left: -1px;
+}
+
+#linha02{
+    margin-left: 1px;
+}
+
+.dadosCli{
+    margin-top: 25px;
+    margin-left: 140px;
+    margin-bottom: -15px;
+    font-family: fantasy;
+    //font-weight: bold;
+    font-size: 1.3rem;
+}
+
+#linha02, #linha02 p{
+    background: #bdbdbd;
+    color: black;
+}
+
+.box{
+    background: #e0e0e0;
+    box-shadow: 5px 6px 2px grey;
+    height: 1000px;
+    width:1000px;
+    position: absolute;
+    margin-left:-500px;
+    left:50%;
+    top:0.5%;
+    border: 1px solid #bdbdbd ;
+    
+}
+
+.cadastroCliente{
+    text-align: center;
+    font-size: 1.9rem;
+    font-weight: bold;
+    text-shadow: 1px 2px 4px white;
+    font-family: monospace;
+    color: #757575;
+}
+
+
+
+
+
+.boxAlt{
+    background: white;
+    height: 800px;
+    width:90%;
+    margin-left: 5%;
+    border: 1px solid #d7ccc8;
+}
+
+input{
+    width:50px;
+    height: 25px;
+    margin-bottom: 20px;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 1px solid #8d6e63;
+}
+
+#pularPagina{
+    float: right;
+    background: #3e2723 ;
+}
+
+.boxIn{
+    
+    margin-top: 50px;
+    width:400px;
+    margin-left: 250px;
+}
+
+.boxIn2{
+    display: none;
+    margin-top: 50px;
+    width:400px;
+    margin-left: 250px;
+}
+
+#salvar{
+    background: #3e2723;
+    float: right;
+}
+
+#salvar2{
+    float: right;
+    background: #3e2723;
+    
+}
+
+#voltar{
+    background: #dd2c00;
+}
+
+label{
+    font-size: 1rem;
+    color: gray;
+    font-family: inherit;
+}
+
+#espacoA{
+    margin-left: 5px;
+}
+
+#detalharIcone{
+    color: #2e7d32;
+}
+
+#alterarIcone{
+    color: #e65100;
+}
+
+#excluirIcone{
+    color: #b71c1c;
+}
+
+#buscar{
+    background: #3e2723 ;
+    margin-left: 5%;
+}
+
+#cadastrar{
+   background: #3e2723 ;
+}
+
+#resultadoDetalhes{
+    margin-left: 5%;
+    margin-top: 10px;
+    display: none;
+    width: 90%;
+    height: 800px;
+    background: white;
+    border: 1px solid #bcaaa4;
+}

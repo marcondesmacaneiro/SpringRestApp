@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <link type="text/css" rel="stylesheet" href="estilo.css"  />
+
+        <script type="text/javascript" src="../jquery-1.11.3.js"></script>
+    </head>
+    <body>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>    
+        
+    <div class="box">
+        <p class="cadastroCliente">Cadastro de Clientes</p>            
+        <a id="buscar" class="waves-effect waves-light btn">Buscar Registros</a>
+        <a id="cadastrar" class="waves-effect waves-light btn">Novo Cadastro</a>
+        <div id="resultado"></div>
+        <div id="resultadoDetalhes">
+            <p class="dadosCli">Dados do cliente</p>
+            <div class="container">
+                <div class="row">
+                    <div id="linha01" class="col s4 "><p>Nome:</p></div>
+                    <div id="linha02" class="col s8 "><p id="linhaNome"></p></div>
+                    <div id="linha01" class="col s4 "><p>CPF:</p></div>
+                    <div id="linha02" class="col s8 "><p id="linhaCpf"></p></div>
+                    <div id="linha01" class="col s4 "><p>Data de Nascimento:</p></div>
+                    <div id="linha02" class="col s8 "><p id="linhaData"></p></div>
+                    <div id="linha01" class="col s4 "><p>RG:</p></div>
+                    <div id="linha02" class="col s8 "><p id="linhaRg"></p></div>
+                    <div id="linha01" class="col s4 "><p>Profissão:</p></div>
+                    <div id="linha02" class="col s8 "><p id="linhaProfissao"></p></div>
+                </div>
+            </div>
+            
+                <p class="dadosCli">Endereço do cliente</p>
+                <div class="container">
+                    <div class="row">
+                        <div id="linha01" class="col s4 "><p>Cidade:</p></div>
+                        <div id="linha02" class="col s8 "><p id="linhaCidade"></p></div>
+                        <div id="linha01" class="col s4 "><p>Estado:</p></div>
+                        <div id="linha02" class="col s8 "><p id="linhaEstado"></p></div>
+                        <div id="linha01" class="col s4 "><p>Rua:</p></div>
+                        <div id="linha02" class="col s8 "><p id="linhaRua"></p></div>
+                        <div id="linha01" class="col s4 "><p>Bairro:</p></div>
+                        <div id="linha02" class="col s8 "><p id="linhaBairro"></p></div>
+                        <div id="linha01" class="col s4 "><p>Complemento:</p></div>
+                        <div id="linha02" class="col s8 "><p id="linhaComplemento"></p></div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+        
+        <script>
+            $(document).ready(function () {
+              
+                $("#buscar").click(function () {
+                    $("#resultadoDetalhes").css("display","none");
+                    $("#resultado").fadeIn("2000");
+   
+                    $.getJSON("/cliente", function (result) {
+                        $("div#resultado").html("");
+                        var tabela = 
+                                "<table>\n\
+                                    <tr>\n\
+                                         <td>Nome</td><td>CPF</td><td>Data de Nascimento</td><td>Ação</td></tr>";
+                        $.each(result._embedded.cliente, function (i, field) {
+                            var dataNasc = field.dataNascimento;
+                            
+                            var ano = dataNasc[0]+dataNasc[1]+dataNasc[2]+dataNasc[3];
+                            var mes = dataNasc[5]+dataNasc[6];
+                            var dia = dataNasc[8]+dataNasc[9];
+                            var data = dia+"/"+mes+"/"+ano;
+                            
+                            var cpfNovo = field.cpf;
+                            var cpfNovo2 = cpfNovo[0]+cpfNovo[1]+cpfNovo[2]+"."+cpfNovo[3]+cpfNovo[4]+cpfNovo[5]+"."+cpfNovo[6]+cpfNovo[7]+cpfNovo[8]+"-"+cpfNovo[9]+cpfNovo[10];
+                        tabela += 
+                                    "<tr>\n\
+                    <td>" + field.nome + "</td>\n\
+                    <td>" +cpfNovo2 +"</td>\n\
+                    <td>"+data+"</td>\n\
+                    <td>\n\
+                        <a href=\"#\" onclick=\"frmDetalhar('" + field.cpf +"'); return false;\"><i id=\"detalharIcone\" class=\"material-icons\" title=\"Detalhar\">description</i></a>\n\
+                        <a href=\"#\" onclick=\"frmAlterar('" + field.cpf +"'); return false;\"><i id=\"alterarIcone\" class=\"material-icons\" title=\"Alterar\">dashboard</i></a>";
+             tabela += "<a id=\"espacoA\" href=\"#\" onclick=\"frmExcluir('" + field.cpf +"'); return false;\"><i id=\"excluirIcone\" class=\"material-icons\" title=\"Excluir\">delete</i></a>"; 
+
+                            tabela += "</td></tr>";
+                        });
+                        tabela += "</table>";
+                         $("div#resultado").append(tabela);
+                    });
+                     
+                    
+                });
+
+                
+                $("#cadastrar").click(function () {
+                    $("#salvar2").css("display","none");
+                    $("#salvar").css("display","block");
+                    $("#resultadoDetalhes").css("display","none");
+                    $("#resultado").css("display","block");
+                    variavelGlobal = 2;
+                    $.get("frmAlterar2.html", function (data, status) {
+                        $("div#resultado").html(data);
+                         
+                    });
+                });
+                
+                
+                
+                 
+                
+    });
+    function frmDetalhar(cpf) {
+        $(document).ready(function () {
+            $("#resultado").css("display","none");
+            $("#resultadoDetalhes").fadeIn(3000);
+            
+            $.getJSON("/cliente/search/findByCpf?cpf=" + cpf, function (result) {
+                    var dataNasc = result._embedded.cliente[0].dataNascimento;
+                            
+                            var ano = dataNasc[0]+dataNasc[1]+dataNasc[2]+dataNasc[3];
+                            var mes = dataNasc[5]+dataNasc[6];
+                            var dia = dataNasc[8]+dataNasc[9];
+                            var data = dia+"/"+mes+"/"+ano;
+                    
+                     var cpfNovo = result._embedded.cliente[0].cpf;
+                            var cpfNovo2 = cpfNovo[0]+cpfNovo[1]+cpfNovo[2]+"."+cpfNovo[3]+cpfNovo[4]+cpfNovo[5]+"."+cpfNovo[6]+cpfNovo[7]+cpfNovo[8]+"-"+cpfNovo[9]+cpfNovo[10];
+                        
+                    
+                    $("#linhaNome").text(result._embedded.cliente[0].nome);
+                    $("#linhaCpf").text(cpfNovo2);
+                    $("#linhaData").text(data);
+                    $("#linhaRg").text(result._embedded.cliente[0].rg);
+                    $("#linhaProfissao").text(result._embedded.cliente[0].profissao);
+                    $("#linhaEstado").text(result._embedded.cliente[0].estado);
+                    $("#linhaCidade").text(result._embedded.cliente[0].cidade);
+                    $("#linhaRua").text(result._embedded.cliente[0].rua);
+                    $("#linhaBairro").text(result._embedded.cliente[0].bairro);
+                    $("#linhaComplemento").text(result._embedded.cliente[0].complemento);
+                    
+            });
+            
+        }); 
+    }
+    function frmExcluir(cpf) {
+        $.getJSON("cliente/search/findByCpf?cpf=" + cpf, function (result) {
+            $.ajax({
+                url: 'clienteteste/' + cpf,
+                type: 'DELETE',
+                contentType: "application/json",
+                data: "{\"cpf\":\"" + result._embedded.cliente[0].cpf + "\"}",
+                success: function (data) {
+                    alert("Sucesso! Registro de cliente deletado! ");
+                    $("#resultadoDetalhes").css("display","none");
+                    $("#resultado").fadeIn("2000");
+   
+                    $.getJSON("cliente", function (result) {
+                        $("div#resultado").html("");
+                        var tabela = 
+                                "<table>\n\
+                                    <tr>\n\
+                                         <td>Nome</td><td>CPF</td><td>Data de Nascimento</td><td>Ação</td></tr>";
+                        $.each(result._embedded.cliente, function (i, field) {
+                            var dataNasc = field.dataNascimento;
+                            
+                            var ano = dataNasc[0]+dataNasc[1]+dataNasc[2]+dataNasc[3];
+                            var mes = dataNasc[5]+dataNasc[6];
+                            var dia = dataNasc[8]+dataNasc[9];
+                            var data = dia+"/"+mes+"/"+ano;
+                            
+                            var cpfNovo = field.cpf;
+                            var cpfNovo2 = cpfNovo[0]+cpfNovo[1]+cpfNovo[2]+"."+cpfNovo[3]+cpfNovo[4]+cpfNovo[5]+"."+cpfNovo[6]+cpfNovo[7]+cpfNovo[8]+"-"+cpfNovo[9]+cpfNovo[10];
+                        tabela += 
+                                    "<tr>\n\
+                    <td>" + field.nome + "</td>\n\
+                    <td>" +cpfNovo2 +"</td>\n\
+                    <td>"+data+"</td>\n\
+                    <td>\n\
+                        <a href=\"#\" onclick=\"frmDetalhar('" + field.cpf +"'); return false;\"><i id=\"detalharIcone\" class=\"material-icons\" title=\"Detalhar\">description</i></a>\n\
+                        <a href=\"#\" onclick=\"frmAlterar('" + field.cpf +"'); return false;\"><i id=\"alterarIcone\" class=\"material-icons\" title=\"Alterar\">dashboard</i></a>";
+             tabela += "<a id=\"espacoA\" href=\"#\" onclick=\"frmExcluir('" + field.cpf +"'); return false;\"><i id=\"excluirIcone\" class=\"material-icons\" title=\"Excluir\">delete</i></a>"; 
+
+                            tabela += "</td></tr>";
+                        });
+                        tabela += "</table>";
+                         $("div#resultado").append(tabela);
+                    });
+                    
+                }
+            });
+        });
+    }
+    
+    function frmAlterar(cpf) {
+         
+                $.get("alterar.html", function (data, status) {
+                    $("div#resultado").html(data);
+                });
+                
+                
+            
+            var cpf2 = cpf[0]+cpf[1]+cpf[2]+"."+cpf[3]+cpf[4]+cpf[5]+"."+cpf[6]+cpf[7]+cpf[8]+"-"+cpf[9]+cpf[10];
+                
+                $.getJSON("cliente/search/findByCpf?cpf=" + cpf, function (result) {
+                    $("#cpf").val(cpf2);
+                    $("#nome").val(result._embedded.cliente[0].nome);
+                    $("#rg").val(result._embedded.cliente[0].rg);
+                    $("#dataNascimento").val(result._embedded.cliente[0].dataNascimento);
+                    $("#profissao").val(result._embedded.cliente[0].profissao);
+                    $("#estado").val(result._embedded.cliente[0].estado);
+                    $("#cidade").val(result._embedded.cliente[0].cidade);
+                    $("#rua").val(result._embedded.cliente[0].rua);
+                    $("#bairro").val(result._embedded.cliente[0].bairro);
+                    $("#complemento").val(result._embedded.cliente[0].complemento);                    
+                });                
+    }
+
+    
+        </script>
+        
+    </body>
+</html>

@@ -37,3 +37,41 @@ INSERT INTO estado(id, uf, nome) VALUES (nextval('estado_id_seq'), 'TO', 'Tocant
 -- INSERT INTO cidade(id, codigo, nome, estado_id) VALUES (nextval('cidade_id_seq'), 6308, 'Maringá', (SELECT id FROM estado WHERE uf = 'PR'));
 -- 
 -- INSERT INTO cidade(id, codigo, nome, estado_id) VALUES (nextval('cidade_id_seq'), 9434, 'Osvaldo Cruz', (SELECT id FROM estado WHERE uf = 'SP'));
+
+
+-- Artistas
+INSERT INTO artista (art_id, art_bibliografia, art_nome, art_popularidade) 
+	VALUES (1, 'São foda bagarai!', 'Metallica', 5);
+INSERT INTO artista (art_id, art_bibliografia, art_nome, art_popularidade) 
+	VALUES (2, 'São fodinhas...', 'Enegenheiros do Hawaii', 4);
+
+-- Album
+INSERT INTO album (alb_id, alb_ano_lancamento, alb_nome, art_id) 
+	VALUES (1, 1991, 'Black Album', 1);
+INSERT INTO album (alb_id, alb_ano_lancamento, alb_nome, art_id) 
+	VALUES (2, 2008, 'Death Magnetic', 1);
+
+-- Genero
+INSERT INTO genero (gen_id, gen_nome) 
+	VALUES (1, 'Metal');
+INSERT INTO genero (gen_id, gen_nome) 
+	VALUES (2, 'Rock');
+INSERT INTO genero (gen_id, gen_nome) 
+	VALUES (3, 'Soul');
+INSERT INTO genero (gen_id, gen_nome) 
+	VALUES (4, 'Rap');
+INSERT INTO genero (gen_id, gen_nome) 
+	VALUES (5, 'Pop');
+INSERT INTO genero (gen_id, gen_nome) 
+	VALUES (6, 'Sertanojo');
+
+-- Musica
+INSERT INTO musica (mus_id, mus_duracao, mus_nome, mus_popularidade, alb_id, gen_id) 
+	VALUES (1, '05:31:00', 'Enter Sandman', 5, 1, 1);
+INSERT INTO musica (mus_id, mus_duracao, mus_nome, mus_popularidade, alb_id, gen_id) 
+	VALUES (2, '06:28:00', 'Nothing Else Matters', 5, 1, 1);
+
+SELECT setval ('album_id_seq', (SELECT max(alb_id) FROM album), true);
+SELECT setval ('artista_id_seq', (SELECT max(art_id) FROM artista), true);
+SELECT setval ('genero_id_seq', (SELECT max(gen_id) FROM genero), true);
+SELECT setval ('musica_id_seq', (SELECT max(mus_id) FROM musica), true);

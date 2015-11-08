@@ -1,0 +1,100 @@
+<fieldset>
+    <form action="./">
+        <h2 class="frmTitle"><span id="acao-title" >Incluir</span> gênero</h2>
+        <input type="text" id="url" class="hidden"/>
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" class="field" required/>
+        </div>
+        <button id="salvarGenero" class="button">Salvar</button>
+    </form>
+</fieldset>
+<table id="genero-list">
+    <thead class="header">
+        <tr>
+            <td>Nome</td>
+            <td style="width:100px;">Ações</td>
+        </tr>
+    </thead>
+</table>
+<script>
+    function buscarGeneros() {
+        $.getJSON('../genero', function (res) {
+            var table = $('#genero-list');
+            table.find('tbody').html(''); // Limpando Table
+            $.each(res._embedded.generoes, function (i, genero) {
+                var linha = '<tr><td>'
+                        + genero.nome
+                        + '</td><td>'
+                        + '<a href="javascript:alterar(\'' + genero._links.self.href + '\')" >Alterar</a>&nbsp;'
+                        + '<a href="javascript:excluir(\'' + genero._links.self.href + '\')" >Excluir</a>'
+                        + '</td></tr>';
+                table.append($(linha));
+            });
+        });
+    }
+
+    function enviarDadosForm(url, type, msgSucesso, fnPrepareNext) {
+        var fieldNome = $('#nome');
+        $.ajax({
+            url: url,
+            type: type,
+            contentType: "application/json",
+            data: JSON.stringify({
+                nome: fieldNome.val()
+            }),
+            success: function () {
+                fieldNome.val('');
+                buscarGeneros();
+                if (fnPrepareNext) {
+                    fnPrepareNext();
+                }
+                alert(msgSucesso);
+            }
+        });
+    }
+
+    function preparaFormIncluir() {
+        $('#acao-title').html('Incluir');
+        $('#salvarGenero').off('click');
+        $('#salvarGenero').on('click', function (e) {
+            enviarDadosForm('../genero', 'POST', 'Sucesso! Gênero cadastrado.');
+            return false;
+        });
+    }
+
+    function preparaFormAlterar() {
+        $('#acao-title').html('Alterar');
+        $('#salvarGenero').off('click');
+        $('#salvarGenero').on('click', function (e) {
+            enviarDadosForm($('#url').val(), 'PATCH', 'Sucesso! Gênero alterado.', preparaFormIncluir);
+            return false;
+        });
+    }
+
+    function alterar(url) {
+        $.getJSON(url, function (genero) {
+            preparaFormAlterar();
+            $('#url').val(url);
+            $('#nome').val(genero.nome);
+        });
+    }
+
+    function excluir(url) {
+        if (confirm('Você tem certeza que deseja excluir este gênero?')) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                contentType: "application/json",
+                success: function (data) {
+                    buscarGeneros();
+                    alert("Sucesso! Gênero excluído.");
+                }
+            });
+        }
+    }
+
+    // Chamadas ao final da definção das funções
+    preparaFormIncluir();
+    buscarGeneros();
+</script>

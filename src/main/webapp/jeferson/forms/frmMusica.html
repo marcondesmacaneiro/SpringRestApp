@@ -1,0 +1,160 @@
+<fieldset>
+    <form action="./">
+        <h2 class="frmTitle"><span id="acao-title" >Incluir</span> música</h2>
+        <input type="text" id="url" class="hidden"/>
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" class="field" required/>
+        </div>
+        <div>
+            <label for="duracao">Duração:</label>
+            <input type="time" id="duracao" class="field" required/>
+        </div>
+        <div>
+            <label for="popularidade">Popularidade:</label>
+            <input type="range" id="popularidade" class="field" min="0" max="5" value="0"/>
+        </div>
+        <div>
+            <label for="genero">Gênero:</label>
+            <select id="genero" class="field" required>
+                <option value="">Selecione...</option>
+            </select>
+        </div>
+        <div>
+            <label for="album">Álbum:</label>
+            <select id="album" class="field" required>
+                <option value="">Selecione...</option>
+            </select>
+        </div>
+        <button id="salvarMusica" class="button">Salvar</button>
+    </form>
+</fieldset>
+<table id="musica-list">
+    <thead class="header">
+        <tr>
+            <td style="width:150px;">Nome</td>
+            <td>Duração</td>
+            <td>Popularidade</td>
+            <!--<td>Gênero</td>-->
+            <!--<td>Álbum</td>-->
+            <td style="width:100px;">Ações</td>
+        </tr>
+    </thead>
+</table>
+<script>
+    function buscarMusicas() {
+        $.getJSON('../musica', function (res) {
+            var table = $('#musica-list');
+            table.find('tbody').html(''); // Limpando Table
+            $.each(res._embedded.musicas, function (i, musica) {
+                var linha = '<tr><td>'
+                        + musica.nome
+                        + '</td><td>'
+                        + musica.duracao
+                        + '</td><td>'
+                        + musica.popularidade
+                        + '</td><td>'
+//                        + musica.genero
+//                        + '</td><td>'
+//                        + musica.album
+//                        + '</td><td>'
+                        + '<a href="javascript:alterar(\'' + musica._links.self.href + '\')" >Alterar</a>&nbsp;'
+                        + '<a href="javascript:excluir(\'' + musica._links.self.href + '\')" >Excluir</a>'
+                        + '</td></tr>';
+                table.append($(linha));
+            });
+        });
+    }
+
+    function enviarDadosForm(url, type, msgSucesso, fnPrepareNext) {
+        var fieldNome = $('#nome');
+        var fieldDuracao = $('#duracao');
+        var fieldPopularidade = $('#popularidade');
+        var fieldGenero = $('#genero');
+        var fieldAlbum = $('#album');
+        $.ajax({
+            url: url,
+            type: type,
+            contentType: "application/json",
+            data: JSON.stringify({
+                nome: fieldNome.val(),
+                duracao: fieldDuracao.val() + ':00',
+                popularidade: fieldPopularidade.val(),
+                genero: fieldGenero.val(),
+                album: fieldAlbum.val()
+            }),
+            success: function () {
+                fieldNome.val('');
+                fieldDuracao.val('');
+                fieldPopularidade.val(0);
+                fieldGenero.val('');
+                fieldAlbum.val('');
+                buscarMusicas();
+                if (fnPrepareNext) {
+                    fnPrepareNext();
+                }
+                alert(msgSucesso);
+            }
+        });
+    }
+
+    function preparaFormIncluir() {
+        $('#acao-title').html('Incluir');
+        $('#salvarMusica').off('click');
+        $('#salvarMusica').on('click', function (e) {
+            enviarDadosForm('../musica', 'POST', 'Sucesso! Música cadastrada.');
+            return false;
+        });
+    }
+
+    function preparaFormAlterar() {
+        $('#acao-title').html('Alterar');
+        $('#salvarMusica').off('click');
+        $('#salvarMusica').on('click', function (e) {
+            enviarDadosForm($('#url').val(), 'PATCH', 'Sucesso! Música alterada.', preparaFormIncluir);
+            return false;
+        });
+    }
+
+    function alterar(url) {
+        $.getJSON(url, function (musica) {
+            preparaFormAlterar();
+            $('#url').val(url);
+            $('#nome').val(musica.nome);
+            $('#duracao').val(musica.duracao);
+            $('#popularidade').val(musica.popularidade);
+            $('#genero').val(musica.genero);
+            $('#album').val(musica.album);
+        });
+    }
+
+    function excluir(url) {
+        if (confirm('Você tem certeza que deseja excluir esta música?')) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                contentType: "application/json",
+                success: function (data) {
+                    buscarMusicas();
+                    alert("Sucesso! Música excluída.");
+                }
+            });
+        }
+    }
+
+    function buscarListaGeneros() {
+        var fieldArtista = $('#genero');
+        buscarLista(fieldArtista, 'genero', 'nome', 'generoes');
+    }
+
+    function buscarListaAlbuns() {
+        var fieldArtista = $('#album');
+        buscarLista(fieldArtista, 'album', 'nome');
+    }
+
+    // Chamadas ao final da definção das funções
+    preparaFormIncluir();
+    buscarMusicas();
+    buscarListaGeneros();
+    buscarListaAlbuns();
+</script>

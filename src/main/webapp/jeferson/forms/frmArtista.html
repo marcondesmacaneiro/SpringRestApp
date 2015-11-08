@@ -1,0 +1,119 @@
+<fieldset>
+    <form action="./">
+        <h2 class="frmTitle"><span id="acao-title" >Incluir</span> artista</h2>
+        <input type="text" id="url" class="hidden"/>
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" class="field" required/>
+        </div>
+        <div>
+            <label for="popularidade">Popularidade:</label>
+            <input type="range" id="popularidade" class="field" min="0" max="5" value="0"/>
+        </div>
+        <div>
+            <label for="bibliografia">Bibliografia:</label>
+            <textarea id="bibliografia" ></textarea>
+        </div>
+        <button id="salvarArtista" class="button">Salvar</button>
+    </form>
+</fieldset>
+<table id="artista-list">
+    <thead class="header">
+        <tr>
+            <td>Nome</td> 
+            <td>Popularidade</td> 
+            <td style="width:100px;">Ações</td>
+        </tr>
+    </thead>
+</table>
+<script>
+    function buscarArtistas() {
+        $.getJSON('../artista', function (res) {
+            var table = $('#artista-list');
+            table.find('tbody').html(''); // Limpando Table
+            $.each(res._embedded.artista, function (i, artista) {
+                var linha = '<tr><td>'
+                        + artista.nome
+                        + '</td><td>'
+                        + artista.popularidade
+                        + '</td><td>'
+                        + '<a href="javascript:alterar(\'' + artista._links.self.href + '\')" >Alterar</a>&nbsp;'
+                        + '<a href="javascript:excluir(\'' + artista._links.self.href + '\')" >Excluir</a>'
+                        + '</td></tr>';
+                table.append($(linha));
+            });
+        });
+    }
+
+    function enviarDadosForm(url, type, msgSucesso, fnPrepareNext) {
+        var fieldNome = $('#nome');
+        var fieldPopularidade = $('#popularidade');
+        var fieldBibliografia = $('#bibliografia');
+        $.ajax({
+            url: url,
+            type: type,
+            contentType: "application/json",
+            data: JSON.stringify({
+                nome: fieldNome.val(),
+                popularidade: fieldPopularidade.val(),
+                bibliografia: fieldBibliografia.val()
+            }),
+            success: function () {
+                fieldNome.val('');
+                fieldPopularidade.val(0);
+                fieldBibliografia.val('');
+                buscarArtistas();
+                if (fnPrepareNext) {
+                    fnPrepareNext();
+                }
+                alert(msgSucesso);
+            }
+        });
+    }
+
+    function preparaFormIncluir() {
+        $('#acao-title').html('Incluir');
+        $('#salvarArtista').off('click');
+        $('#salvarArtista').on('click', function (e) {
+            enviarDadosForm('../artista', 'POST', 'Sucesso! Artista cadastrado.');
+            return false;
+        });
+    }
+
+    function preparaFormAlterar() {
+        $('#acao-title').html('Alterar');
+        $('#salvarArtista').off('click');
+        $('#salvarArtista').on('click', function (e) {
+            enviarDadosForm($('#url').val(), 'PATCH', 'Sucesso! Arista alterado.', preparaFormIncluir);
+            return false;
+        });
+    }
+
+    function alterar(url) {
+        $.getJSON(url, function (artista) {
+            preparaFormAlterar();
+            $('#url').val(url);
+            $('#nome').val(artista.nome);
+            $('#popularidade').val(artista.popularidade);
+            $('#bibliografia').val(artista.bibliografia);
+        });
+    }
+
+    function excluir(url) {
+        if (confirm('Você tem certeza que deseja excluir este artista?')) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                contentType: "application/json",
+                success: function (data) {
+                    buscarArtistas();
+                    alert("Sucesso! Artista excluído.");
+                }
+            });
+        }
+    }
+
+    // Chamadas ao final da definção das funções
+    preparaFormIncluir();
+    buscarArtistas();
+</script>

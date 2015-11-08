@@ -1,0 +1,91 @@
+/* 
+    Created on : 18/10/2015, 16:25:39
+    Author     : Jeferson Duwe <duwejeferson@gmail.com>
+*/
+
+* {
+    font-family: sans-serif;
+    margin: 0;
+}
+
+.menu {
+    background-color: #B4B4B4;
+    margin: 0 0 25px;
+}
+
+.menu ul{
+    padding: 0;
+    list-style-type: none;
+    display: table;
+    margin: auto;
+
+}
+
+.menu li {
+    display: inline-block;
+    padding: 0 5px;
+}
+
+.menu a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+}
+
+.menu li:hover {
+    color: #B4B4B4;
+    background-color: #000; 
+}
+
+#container {
+    display: table;
+    margin: auto;
+    width: 500px;
+}
+
+#container table {
+    width: 100%;
+}
+
+table{
+    /*border: 1px solid black;*/
+}
+
+.header {
+    font-weight: bold;
+}
+
+.hidden{
+    display: none;
+}
+
+.frmTitle {
+    text-align: center;
+}
+
+form label {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    vertical-align: top;
+}
+
+form .field {
+    width: 180px;
+}
+
+.button {
+    float: right;
+    right: 90px;
+    position: relative;
+}
+
+form textarea {
+    height: 100px;
+    width: 300px;
+    resize: none;
+}
+
+
+

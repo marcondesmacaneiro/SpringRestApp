@@ -1,0 +1,129 @@
+<fieldset>
+    <form action="./">
+        <h2 class="frmTitle"><span id="acao-title" >Incluir</span> álbum</h2>
+        <input type="text" id="url" class="hidden"/>
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" class="field" required/>
+        </div>
+        <div>
+            <label for="anoLancamento">Ano:</label>
+            <input type="number" id="anoLancamento" class="field" required/>
+        </div>
+        <div>
+            <label for="artista">Artista:</label>
+            <select id="artista" class="field" required>
+                <option value="">Selecione...</option>
+            </select>
+        </div>
+        <button id="salvarAlbum" class="button">Salvar</button>
+    </form>
+</fieldset>
+<table id="album-list">
+    <thead class="header">
+        <tr>
+            <td>Nome</td> 
+            <td>Ano</td> 
+            <td>Artista</td> 
+            <td style="width:100px;">Ações</td>
+        </tr>
+    </thead>
+</table>
+<script>
+    function buscarAlbuns() {
+        $.getJSON('../album', function (res) {
+            var table = $('#album-list');
+            table.find('tbody').html(''); // Limpando Table
+            $.each(res._embedded.album, function (i, album) {
+                var linha = '<tr><td>'
+                        + album.nome
+                        + '</td><td>'
+                        + album.anoLancamento
+                        + '</td><td>'
+                        + album.artista
+                        + '</td><td>'
+                        + '<a href="javascript:alterar(\'' + album._links.self.href + '\')" >Alterar</a>&nbsp;'
+                        + '<a href="javascript:excluir(\'' + album._links.self.href + '\')" >Excluir</a>'
+                        + '</td></tr>';
+                table.append($(linha));
+            });
+        });
+    }
+
+    function enviarDadosForm(url, type, msgSucesso, fnPrepareNext) {
+        var fieldNome = $('#nome');
+        var fieldAnoLancamento = $('#anoLancamento');
+        var fieldArtista = $('#artista');
+        $.ajax({
+            url: url,
+            type: type,
+            contentType: "application/json",
+            data: JSON.stringify({
+                nome: fieldNome.val(),
+                anoLancamento: fieldAnoLancamento.val(),
+                artista: fieldArtista.val()
+            }),
+            success: function (data) {
+                fieldNome.val('');
+                fieldAnoLancamento.val('');
+                fieldArtista.val('');
+                buscarAlbuns();
+                if (fnPrepareNext) {
+                    fnPrepareNext();
+                }
+                alert(msgSucesso);
+            }
+        });
+    }
+
+    function preparaFormIncluir() {
+        $('#acao-title').html('Incluir');
+        $('#salvarAlbum').off('click');
+        $('#salvarAlbum').on('click', function (e) {
+            enviarDadosForm('../album', 'POST', 'Sucesso! Álbum cadastrado.');
+            return false;
+        });
+    }
+
+    function preparaFormAlterar() {
+        $('#acao-title').html('Alterar');
+        $('#salvarAlbum').off('click');
+        $('#salvarAlbum').on('click', function (e) {
+            enviarDadosForm($('#url').val(), 'PATCH', 'Sucesso! Álbum alterado.', preparaFormIncluir);
+            return false;
+        });
+    }
+
+    function alterar(url) {
+        $.getJSON(url, function (album) {
+            preparaFormAlterar();
+            $('#url').val(url);
+            $('#nome').val(album.nome);
+            $('#anoLancamento').val(album.anoLancamento);
+        });
+    }
+
+    function excluir(url) {
+        if (confirm('Você tem certeza que deseja excluir este álbum?')) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                contentType: "application/json",
+                success: function (data) {
+                    buscarAlbuns();
+                    alert("Sucesso! Álbum excluído.");
+                }
+            });
+        }
+    }
+
+    function buscarListaArtistas() {
+        var fieldArtista = $('#artista');
+        buscarLista(fieldArtista, 'artista', 'nome');
+    }
+
+    // Chamadas ao final da definção das funções
+    preparaFormIncluir();
+    buscarAlbuns();
+    buscarListaArtistas();
+</script>

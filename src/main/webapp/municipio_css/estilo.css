@@ -1,0 +1,160 @@
+/* 
+    Created on : 16/07/2015, 21:12:22
+    Author     : Lucas
+*/
+
+@media only screen and (max-width: 880px) {
+   .site {
+      display: none;
+   }
+}
+
+@font-face {
+   font-family: 'Material Icons';
+   font-style: normal;
+   font-weight: 400;
+   src: url(../municipio_font/material-design-icons/MaterialIcons-Regular.eot); /* For IE6-8 */
+   src: local('Material Icons'),
+      local('MaterialIcons-Regular'),
+      url(../municipio_font/material-design-icons/MaterialIcons-Regular.woff2) format('woff2'),
+      url(../municipio_font/material-design-icons/MaterialIcons-Regular.woff) format('woff'),
+      url(../municipio_font/material-design-icons/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+body {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+   background-color: #e0f2f1;
+}
+
+main {
+   flex: 1 0 auto;
+}
+
+.material-icons {
+   font-family: 'Material Icons';
+   font-weight: normal;
+   font-style: normal;
+   font-size: 24px;  /* Preferred icon size */
+   display: inline-block;
+   width: 1em;
+   height: 1em;
+   line-height: 1;
+   text-transform: none;
+   letter-spacing: normal;
+   word-wrap: normal;
+
+   /* Support for all WebKit browsers. */
+   -webkit-font-smoothing: antialiased;
+   /* Support for Safari and Chrome. */
+   text-rendering: optimizeLegibility;
+
+   /* Support for Firefox. */
+   -moz-osx-font-smoothing: grayscale;
+
+   /* Support for IE. */
+   font-feature-settings: 'liga';
+}
+
+.nav .container .top-nav .nav-wrapper, footer.page-footer, .pagination li.active {
+   background-color: #4db6ac !important;
+}
+
+.verde {
+   background-color: #4db6ac !important;
+}
+
+.textoverde {
+   color: #004d40 !important;
+}
+
+.textocinza {
+   color: #302F31 !important;
+}
+
+.textobranco {
+   color: #fff !important;
+}
+
+.size18 {
+   font-size: 18px;
+}
+
+.texto-direita {
+   text-align: right;
+}
+
+.click {
+   cursor: pointer;
+}
+
+.site {
+   background-color: #302F31;
+   color: white;
+   padding-top: 38px !important;
+   text-align: center;
+   height: 110px;
+   font-size: 1.25em;
+   line-height: 35px;
+   font-family: sans-serif;
+   letter-spacing: 2px;
+}
+
+.card-action-comentario {
+   padding: 0px 20px 0px 20px !important;
+}
+
+.brand-logo {
+   padding-left: 10px !important;
+}
+
+.pointer {
+   cursor: pointer;
+}
+
+.padding-left-10 {
+   padding-left: 10px;
+}
+
+.mapa {
+   height: 346px;
+}
+
+.imagemHome {
+   height: 428px;
+}
+
+.text-align-center {
+   text-align: center;
+}
+
+.width-20 {
+   width: 20%;
+}
+
+.width-60 {
+   width: 60%;
+}
+
+.bandeira {
+   width: 50px;
+   height: 50px;
+   padding-top: 5px;
+}
+
+.center {
+   text-align: center;
+}
+
+.toast-container {
+   z-index: 1050 !important;
+}
+
+.modal {
+   z-index: 901 !important;
+}
+
+.lean-overlay {
+   z-index: 900 !important;
+}

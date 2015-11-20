@@ -16,6 +16,10 @@
 
     <properties>
         <java.version>1.8</java.version>
+        
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+   
     </properties>
 
     <dependencies>
@@ -65,7 +69,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>TomcatServer</server>
-                    <path>/SpringRESTApp<!--##${maven.build.timestamp} pesquisar para adicionar variavel --></path>
+                    <path>/SpringRESTApp##${maven.build.timestamp} <!--pesquisar para adicionar variavel --></path>
                 </configuration>
             </plugin>
 

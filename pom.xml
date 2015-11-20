@@ -69,7 +69,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>TomcatServer</server>
-                    <path>/SpringRESTApp##${maven.build.timestamp} <!--pesquisar para adicionar variavel --></path>
+                    <path>/SpringRESTApp##${maven.build.timestamp}</path>
                 </configuration>
             </plugin>
 

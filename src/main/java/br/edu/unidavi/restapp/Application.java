@@ -2,21 +2,21 @@ package br.edu.unidavi.restapp;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.SpringBootServletInitializer;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.web.WebApplicationInitializer;
 
-@SpringBootApplication
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan
 public class Application extends SpringBootServletInitializer {
-    
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class);
+        // Customize the application or call application.sources(...) to add sources
+        // Since our example is itself a @Configuration class we actually don't
+        // need to override this method.
+        return application;
     }
 
-    public static void main(String... args) {
-        System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
-        final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
-    }
-
-    //public static void main(String[] args) {
-        //SpringApplication.run(Application.class, args);
-    //}
 }

@@ -75,3 +75,9 @@ SELECT setval ('album_id_seq', (SELECT max(alb_id) FROM album), true);
 SELECT setval ('artista_id_seq', (SELECT max(art_id) FROM artista), true);
 SELECT setval ('genero_id_seq', (SELECT max(gen_id) FROM genero), true);
 SELECT setval ('musica_id_seq', (SELECT max(mus_id) FROM musica), true);
+
+
+INSERT INTO cliente(id, cpf, nome, data_nascimento, RG, profissao, estado, cidade, rua, bairro, complemento) VALUES (nextval('cliente_id_seq'), '09743547916', 'Cleber Lego Schmidt','1994-10-09','6.172.163','Pedreiro','Santa Catarina','Laurentino','Mario Ferrari','Matador de Bolinho','Perto da estrada');
+INSERT INTO cliente(id, cpf, nome, data_nascimento, RG, profissao, estado, cidade, rua, bairro, complemento) VALUES (nextval('cliente_id_seq'), '09743537910', 'Rodolfo da Cunha','1992-12-09','6.142.163','Pintor','Santa Catarina','Laurentino','Mario Ferrari','Ribeiro Rocha','Perto da estrada');
+INSERT INTO cliente(id, cpf, nome, data_nascimento, RG, profissao, estado, cidade, rua, bairro, complemento) VALUES (nextval('cliente_id_seq'), '73838298711', 'James Bond','2001-01-03','6.172.161','Prefeito','Santa Catarina','Rio do sul','XV de Novembro','Abacaxi','Perto da sinaleira');
+INSERT INTO cliente(id, cpf, nome, data_nascimento, RG, profissao, estado, cidade, rua, bairro, complemento) VALUES (nextval('cliente_id_seq'), '63782281718', 'Clodilte Florinda','1994-09-30','4.172.163','Dona de Casa','Rio de Janeiro','Rio de Janeiro','Ipanema','porto sul','Perto do Mar');

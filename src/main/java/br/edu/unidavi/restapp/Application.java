@@ -6,8 +6,9 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.web.WebApplicationInitializer;
 
 //@Configuration
-@EnableAutoConfiguration
-@ComponentScan
+//@EnableAutoConfiguration
+//@ComponentScan
+@SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
     @Override

@@ -11,6 +11,11 @@ public class Application extends SpringBootServletInitializer {
         return application.sources(Application.class);
     }
 
+    public static void main(String... args) {
+        System.setProperty("spring.profiles.default", System.getProperty("spring.profiles.default", "dev"));
+        final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
+    }
+
     //public static void main(String[] args) {
         //SpringApplication.run(Application.class, args);
     //}

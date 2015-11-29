@@ -20,7 +20,7 @@
             var cpfReformulado = $("#cpf").val();
                 cpfReformulado = cpfReformulado[0]+cpfReformulado[1]+cpfReformulado[2]+cpfReformulado[4]+cpfReformulado[5]+cpfReformulado[6]+cpfReformulado[8]+cpfReformulado[9]+cpfReformulado[10]+cpfReformulado[12]+cpfReformulado[13];
                     $.ajax({
-                        url: 'clienteteste/',
+                        url: '../clienteteste/',
                         type: 'POST',
                         contentType: "application/json",
                         data: "{\"cpf\":\"" + cpfReformulado + "\", \"nome\":\"" + $("#nome").val() + "\",\"dataNascimento\":\"" + $("#dataNascimento").val() + "\",\"rg\":\"" + $("#rg").val() + "\",\"profissao\":\"" + $("#profissao").val() + "\",\"estado\":\"" + $("#estado").val() + "\",\"cidade\":\"" + $("#cidade").val() + "\",\"rua\":\"" + $("#rua").val() + "\",\"bairro\":\"" + $("#bairro").val() + "\",\"complemento\":\"" + $("#complemento").val() + "\"}",
@@ -28,7 +28,7 @@
                             alert("Sucesso! Cliente cadastrado com sucesso! ");
                            
    
-                    $.getJSON("cliente", function (result) {
+                    $.getJSON("../cliente", function (result) {
                         $("div#resultado").html("");
                         var tabela = 
                                 "<table>\n\

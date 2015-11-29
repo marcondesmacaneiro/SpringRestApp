@@ -126,7 +126,7 @@
             $("#resultado").css("display","none");
             $("#resultadoDetalhes").fadeIn(3000);
             
-            $.getJSON("/clienteteste/search/findByCpf?cpf=" + cpf, function (result) {
+            $.getJSON("../clienteteste/search/findByCpf?cpf=" + cpf, function (result) {
                     var dataNasc = result._embedded.cliente[0].dataNascimento;
                             
                             var ano = dataNasc[0]+dataNasc[1]+dataNasc[2]+dataNasc[3];
@@ -154,9 +154,9 @@
         }); 
     }
     function frmExcluir(cpf) {
-        $.getJSON("clienteteste/search/findByCpf?cpf=" + cpf, function (result) {
+        $.getJSON("../clienteteste/search/findByCpf?cpf=" + cpf, function (result) {
             $.ajax({
-                url: 'clienteteste/' + cpf,
+                url: '../clienteteste/' + cpf,
                 type: 'DELETE',
                 contentType: "application/json",
                 data: "{\"cpf\":\"" + result._embedded.cliente[0].cpf + "\"}",
@@ -165,7 +165,7 @@
                     $("#resultadoDetalhes").css("display","none");
                     $("#resultado").fadeIn("2000");
    
-                    $.getJSON("cliente", function (result) {
+                    $.getJSON("../cliente", function (result) {
                         $("div#resultado").html("");
                         var tabela = 
                                 "<table>\n\

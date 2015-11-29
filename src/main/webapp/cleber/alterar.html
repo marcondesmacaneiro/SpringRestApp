@@ -29,9 +29,9 @@ and open the template in the editor.
                 
         
         
-            $.getJSON("cliente/search/findByCpf?cpf=" + cpf, function (result) {
+            $.getJSON("../cliente/search/findByCpf?cpf=" + cpf, function (result) {
             $.ajax({
-                url: 'clienteteste/' + cpf,
+                url: '../clienteteste/' + cpf,
                 type: 'PUT',
                 contentType: "application/json",
                 data: "{\"cpf\":\"" + cpf + "\", \"nome\":\"" + $("#nome").val() + "\",\"dataNascimento\":\"" + $("#dataNascimento").val() + "\",\"rg\":\"" + $("#rg").val() + "\",\"profissao\":\"" + $("#profissao").val() + "\",\"estado\":\"" + $("#estado").val() + "\",\"cidade\":\"" + $("#cidade").val() + "\",\"rua\":\"" + $("#rua").val() + "\",\"bairro\":\"" + $("#bairro").val() + "\",\"complemento\":\"" + $("#complemento").val() + "\"}",
@@ -40,7 +40,7 @@ and open the template in the editor.
                         $("#resultadoDetalhes").css("display","none");
                         $("#resultado").fadeIn("2000");
 
-                        $.getJSON("cliente", function (result) {
+                        $.getJSON("../cliente", function (result) {
                         $("div#resultado").html("");
                         var tabela = 
                                 "<table>\n\

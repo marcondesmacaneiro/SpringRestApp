@@ -68,7 +68,7 @@
                     $("#resultadoDetalhes").css("display","none");
                     $("#resultado").fadeIn("2000");
    
-                    $.getJSON("/cliente", function (result) {
+                    $.getJSON("../cliente", function (result) {
                         $("div#resultado").html("");
                         var tabela = 
                                 "<table>\n\

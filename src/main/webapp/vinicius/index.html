@@ -36,7 +36,7 @@
                $("div#resultado").html(data);
             });
             $("#cadastrar").css({"display": "none"})
-            $.getJSON("/produto/search/findByNome?nome=" + nome, function (result) {
+            $.getJSON("../produto/search/findByNome?nome=" + nome, function (result) {
                $("#nome").val(result._embedded.produto[0].nome);
                $("#valor").val(result._embedded.produto[0].valor);
                $("#salvarAlteracao").click(function () {
@@ -74,7 +74,7 @@
          }
 
          function frmExcluir(nome) {
-            $.getJSON("/produto/search/findByNome?nome=" + nome, function (result) {
+            $.getJSON("../produto/search/findByNome?nome=" + nome, function (result) {
                $.ajax({
                   url: 'produtoteste/' + nome,
                   type: 'DELETE',
@@ -104,7 +104,7 @@
          $(document).ready(function () {
             $("#buscar").click(function () {
                $("#cadastrar").css({"display": ""})
-               $.getJSON("/produto", function (result) {
+               $.getJSON("../produto", function (result) {
                   $("div#resultado").html("");
                   var tabela = "<table id='table_consulta' class='table table-striped table-bordered'><thead><tr><th>Nome</th><th>Valor</th><th>Ação</th></tr></thead><tbody>";
                   $.each(result._embedded.produto, function (i, field) {
@@ -125,7 +125,7 @@
             });
 
             $("#cadastrar").click(function () {
-               $.get("vinicius/incluir.html", function (data, status) {
+               $.get("incluir.html", function (data, status) {
                   $("div#resultado").html(data);
                   $("#cadastrar").css({"display": "none"})
                   $("#salvarAlteracao").click(function () { 

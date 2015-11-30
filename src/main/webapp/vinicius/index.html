@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>REST App</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.0.0.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-flash-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/datatables.min.css"/>
+      <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,jszip-2.5.0,pdfmake-0.1.18,dt-1.10.9,af-2.0.0,b-1.0.3,b-colvis-1.0.3,b-flash-1.0.3,b-html5-1.0.3,b-print-1.0.3,cr-1.2.0,fc-3.1.0,fh-3.0.0,kt-2.0.0,r-1.0.7,rr-1.0.0,sc-1.3.0,se-1.0.1/datatables.min.js"></script>
+
+   </head>
+   <body>
+      <div id="telainicial">
+         <nav class="navbar navbar-default">
+            <div class="container-fluid">
+               <div class="navbar-header">
+                  <a class="navbar-brand glyphicon glyphicon-home btn-lg" id="buscar"></a>
+               </div>
+               <div class="navbar-header">
+                  <a class="navbar-brand glyphicon glyphicon-plus btn-lg" id="cadastrar"></a>
+               </div>
+            </div>
+         </nav>       
+         <div id="resultado" style="margin: 20px;"></div>
+         <div class="alert alert-success" role="alert" style="width: 40%; position: absolute; left: 30%; display:none;" id="alerta_sucesso"></div>
+         <div class="alert alert-danger" role="alert" style="width: 40%; position: absolute; left: 30%; display:none;" id="alerta_erro"></div>
+      </div>
+
+
+      <script type="text/javascript">
+         function frmAlterar(nome) {
+            $.get("vinicius/incluir.html", function (data, status) {
+               $("div#resultado").html(data);
+            });
+            $("#cadastrar").css({"display": "none"})
+            $.getJSON("produto/search/findByNome?nome=" + nome, function (result) {
+               $("#nome").val(result._embedded.produto[0].nome);
+               $("#valor").val(result._embedded.produto[0].valor);
+               $("#salvarAlteracao").click(function () {
+                  $.ajax({
+                     url: 'produtoteste/' + result._embedded.produto[0].nome,
+                     type: 'PUT',
+                     contentType: "application/json",
+                     data: "{\"nome\":\"" + $("#nome").val() + "\", \"valor\":\"" + $("#valor").val() + "\"}",
+                     success: function (data) {
+                        $("#alerta_sucesso").html("Registro alterado com sucesso.");
+                        $("#alerta_sucesso").fadeIn();
+                        setTimeout(function ()
+                        {
+                           $("#alerta_sucesso").fadeOut();
+                        }, 1000);
+                        $("#buscar").click();
+                     },
+                     error: function ()
+                     {
+                        $("#alerta_erro").html("Houve um erro ao alterar o registro.");
+                        $("#alerta_erro").fadeIn();
+                        setTimeout(function ()
+                        {
+                           $("#alerta_erro").fadeOut();
+                        }, 1000);
+                     }
+                  });
+               });
+               $("#cancelar").click(function () {
+                  $("#buscar").click();
+                  $("#cadastrar").css({"display": ""})
+               });
+
+            });
+         }
+
+         function frmExcluir(nome) {
+            $.getJSON("produto/search/findByNome?nome=" + nome, function (result) {
+               $.ajax({
+                  url: 'produtoteste/' + nome,
+                  type: 'DELETE',
+                  contentType: "application/json",
+                  data: "{\"nome\":\"" + result._embedded.produto[0].nome + "\", \"valor\":\"" + result._embedded.produto[0].valor + "\"}",
+                  success: function (data) {
+                     $("#alerta_sucesso").html("Registro excluído com sucesso.");
+                     $("#alerta_sucesso").fadeIn();
+                     setTimeout(function ()
+                     {
+                        $("#alerta_sucesso").fadeOut();
+                     }, 1000);
+                     $("#buscar").click();
+                  },
+                  error: function ()
+                  {
+                     $("#alerta_erro").html("Houve um erro ao excluír o registro.");
+                     $("#alerta_erro").fadeIn();
+                     setTimeout(function ()
+                     {
+                        $("#alerta_erro").fadeOut();
+                     }, 1000);
+                  }
+               });
+            });
+         }
+         $(document).ready(function () {
+            $("#buscar").click(function () {
+               $("#cadastrar").css({"display": ""})
+               $.getJSON("produto", function (result) {
+                  $("div#resultado").html("");
+                  var tabela = "<table id='table_consulta' class='table table-striped table-bordered'><thead><tr><th>Nome</th><th>Valor</th><th>Ação</th></tr></thead><tbody>";
+                  $.each(result._embedded.produto, function (i, field) {
+                     tabela += "<tr><td>" + field.nome + "</td><td>" + field.valor +
+                        "</td><td><a class='glyphicon glyphicon-pencil' style='padding-right: 8px;' onclick=\"frmAlterar('" + field.nome +
+                        "'); return false;\"></a>";
+
+                     tabela += "<a class='glyphicon glyphicon-trash'onclick=\"frmExcluir('" + field.nome +
+                        "'); return false;\"></a>";
+
+                     tabela += "</td></tr>";
+                  });
+                  tabela += "</tbody></table>";
+                  $("div#resultado").append(tabela);
+                  $("#table_consulta").DataTable();
+               });
+
+            });
+
+            $("#cadastrar").click(function () {
+               $.get("vinicius/incluir.html", function (data, status) {
+                  $("div#resultado").html(data);
+                  $("#cadastrar").css({"display": "none"})
+                  $("#salvarAlteracao").click(function () { 
+                     $.ajax({
+                        url: 'produtoteste/',
+                        type: 'POST',
+                        contentType: "application/json",
+                        data: "{\"nome\":\"" + $("#nome").val() + "\", \"valor\":\"" + $("#valor").val() + "\"}",
+                        success: function (data) {
+                           $("#alerta_sucesso").html("Registro incluído com sucesso.");
+                           $("#alerta_sucesso").fadeIn();
+                           setTimeout(function ()
+                           {
+                              $("#alerta_sucesso").fadeOut();
+                           }, 1000);
+                           $("#buscar").click();
+                           $("#cadastrar").css({"display": ""})
+                        },
+                        error: function ()
+                        {
+                           $("#alerta_erro").html("Houve um erro ao incluir o registro.");
+                           $("#alerta_erro").fadeIn();
+                           setTimeout(function ()
+                           {
+                              $("#alerta_erro").fadeOut();
+                           }, 1000);
+                        }
+                     });
+                  });
+                  $("#cancelar").click(function () {
+                     $("#buscar").click();
+                     $("#cadastrar").css({"display": ""})
+                  });
+               });
+            });
+         });
+         $(document).ready(function () {
+            $("#buscar").click();
+         })
+      </script>
+   </body>
+</html>
